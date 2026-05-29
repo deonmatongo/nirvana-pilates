@@ -824,9 +824,14 @@ footer{
 </div>
 
 <script>
-  // Always start at the top on fresh load
+  // Force top on every entry — including Instagram / TikTok in-app browsers
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  document.documentElement.style.scrollBehavior = 'auto';
   window.scrollTo(0, 0);
+  window.addEventListener('load', () => {
+    window.scrollTo(0, 0);
+    setTimeout(() => { document.documentElement.style.scrollBehavior = ''; }, 100);
+  });
 
   // Hamburger toggle
   const burger = document.getElementById('hamburger');
