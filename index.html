@@ -110,13 +110,11 @@ nav{
   text-align:center;position:relative;overflow:hidden;background:var(--ink);
 }
 .hero-bg{
-  position:absolute;inset:0;overflow:hidden;
-}
-.hero-bg video{
-  width:100%;height:100%;object-fit:cover;display:block;
+  position:absolute;inset:0;
+  background:url('hero.jpg') center/cover no-repeat;
   opacity:.45;transform:scale(1.05);transition:transform 9s ease;
 }
-.hero.loaded .hero-bg video{transform:scale(1)}
+.hero.loaded .hero-bg{transform:scale(1)}
 .hero::after{
   content:'';position:absolute;inset:0;
   background:linear-gradient(to top,rgba(28,26,23,.75) 0%,rgba(28,26,23,.1) 55%,rgba(28,26,23,.25) 100%);
@@ -278,11 +276,12 @@ nav{
 }
 .about-img-wrap{position:relative}
 .about-img{aspect-ratio:3/4;overflow:hidden;border-radius:var(--r);box-shadow:var(--shadow)}
-.about-img img{
+.about-img img,.about-img video{
   width:100%;height:100%;object-fit:cover;display:block;
   transition:transform 1.2s ease;
 }
-.about-img-wrap:hover .about-img img{transform:scale(1.04)}
+.about-img-wrap:hover .about-img img,
+.about-img-wrap:hover .about-img video{transform:scale(1.04)}
 .about-accent{
   position:absolute;bottom:-24px;right:-24px;width:110px;height:110px;
   border-radius:50%;border:1px solid rgba(184,155,127,.18);
@@ -560,11 +559,7 @@ footer{
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <div class="hero-bg">
-    <video autoplay muted loop playsinline preload="auto">
-      <source src="hero.mp4" type="video/mp4">
-    </video>
-  </div>
+  <div class="hero-bg"></div>
   <div class="hero-content">
     <span class="eyebrow">Pilates &amp; Wellness Studio</span>
     <h1>Nir<em>vana</em></h1>
@@ -669,7 +664,9 @@ footer{
 <section class="about" id="about">
   <div class="about-img-wrap fade-up">
     <div class="about-img">
-      <img src="https://images.unsplash.com/photo-1754257319723-6a775bedb0fc?w=900&q=80" alt="Nirvana Studio" loading="lazy">
+      <video autoplay muted loop playsinline preload="auto">
+        <source src="hero.mp4" type="video/mp4">
+      </video>
     </div>
     <div class="about-accent"></div>
   </div>
