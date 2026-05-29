@@ -112,9 +112,15 @@ nav{
 .hero-bg{
   position:absolute;inset:0;
   background:url('hero.jpg') center/cover no-repeat;
-  opacity:.45;transform:scale(1.05);transition:transform 9s ease;
+  opacity:.45;
+  animation:heroPan 18s ease-in-out infinite alternate;
 }
-.hero.loaded .hero-bg{transform:scale(1)}
+@keyframes heroPan{
+  0%  {transform:scale(1.08) translate(0,0)}
+  33% {transform:scale(1.06) translate(-1%,1%)}
+  66% {transform:scale(1.1)  translate(1%,-1%)}
+  100%{transform:scale(1.07) translate(-0.5%,0.5%)}
+}
 .hero::after{
   content:'';position:absolute;inset:0;
   background:linear-gradient(to top,rgba(28,26,23,.75) 0%,rgba(28,26,23,.1) 55%,rgba(28,26,23,.25) 100%);
@@ -595,7 +601,7 @@ footer{
       <div class="card-img">
         <img src="https://images.unsplash.com/photo-1747239202356-764770773c9a?w=900&q=80" alt="Restorative Touch" loading="lazy">
         <span class="card-badge">Featured</span>
-        <div class="card-meta"><span>60 — 90 min</span><span>From R680</span></div>
+        <div class="card-meta"><span>60 — 90 min</span><span>From $40</span></div>
         <div class="card-hover-btn"><a href="booking.html">Book This Session</a></div>
       </div>
       <div class="card-body">
@@ -610,7 +616,7 @@ footer{
       <div class="card-img">
         <img src="https://images.unsplash.com/photo-1754257319789-f6fa7c284ba2?w=900&q=80" alt="Float & Surrender" loading="lazy">
         <span class="card-badge">Featured</span>
-        <div class="card-meta"><span>60 — 90 min</span><span>From R750</span></div>
+        <div class="card-meta"><span>60 — 90 min</span><span>From $50</span></div>
         <div class="card-hover-btn"><a href="booking.html">Book This Session</a></div>
       </div>
       <div class="card-body">
@@ -625,7 +631,7 @@ footer{
       <div class="card-img">
         <img src="https://images.unsplash.com/photo-1747240549807-fc3962949818?w=900&q=80" alt="Reformer Pilates" loading="lazy">
         <span class="card-badge">Signature</span>
-        <div class="card-meta"><span>55 min</span><span>From R320</span></div>
+        <div class="card-meta"><span>55 min</span><span>From $25</span></div>
         <div class="card-hover-btn"><a href="booking.html">Book This Session</a></div>
       </div>
       <div class="card-body">
@@ -640,7 +646,7 @@ footer{
       <div class="card-img">
         <img src="https://plus.unsplash.com/premium_photo-1666264200744-51f90d07c09e?w=900&q=80" alt="Guided Meditation" loading="lazy">
         <span class="card-badge card-badge-sage">New</span>
-        <div class="card-meta"><span>40 min</span><span>From R220</span></div>
+        <div class="card-meta"><span>40 min</span><span>From $15</span></div>
         <div class="card-hover-btn"><a href="booking.html">Book This Session</a></div>
       </div>
       <div class="card-body">
@@ -779,7 +785,7 @@ footer{
     <p>Reserve your space in our intimate studio. First time? Reach out — we will match you to the right offering.</p>
     <div class="btn-row btn-row-center">
       <a href="mailto:hello@nirvanapilates.co.za" class="btn-primary-light">Reserve Your Spot</a>
-      <a href="tel:+27000000000"                  class="btn-ghost-light">Call Us</a>
+      <a href="tel:+263771234567"                  class="btn-ghost-light">Call Us</a>
     </div>
   </div>
 </section>
@@ -807,8 +813,8 @@ footer{
     <h4>Contact</h4>
     <ul>
       <li><a href="mailto:hello@nirvanapilates.co.za">hello@nirvanapilates.co.za</a></li>
-      <li><a href="tel:+27000000000">+27 (0) 00 000 0000</a></li>
-      <li><a href="#">Johannesburg, South Africa</a></li>
+      <li><a href="tel:+263771234567">+263 77 123 4567</a></li>
+      <li><a href="#">14 Borrowdale Rd, Harare, Zimbabwe</a></li>
     </ul>
   </div>
 </footer>
@@ -818,8 +824,6 @@ footer{
 </div>
 
 <script>
-  // Hero slow-zoom on load
-  document.getElementById('hero').classList.add('loaded');
 
   // Hamburger toggle
   const burger = document.getElementById('hamburger');
