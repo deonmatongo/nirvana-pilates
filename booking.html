@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a Session — Nirvana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+/* ── TOKENS ── */
+:root{
+  --bone:      #f4f1ea;
+  --bone-deep: #e9e4d8;
+  --ink:       #1c1a17;
+  --ink-deep:  #100f0d;
+  --clay:      #9a7b5f;
+  --clay-soft: #b89b7f;
+  --sage:      #7d8471;
+  --border:    rgba(28,26,23,.14);
+  --shadow:    0 24px 60px -28px rgba(28,26,23,.35);
+  --r:         8px;
+}
+
+body{font-family:'Jost',sans-serif;background:var(--bone);color:var(--ink);font-weight:300;overflow-x:hidden;min-height:100vh}
+h1 em,h2 em,h3 em{font-style:italic;color:var(--clay)}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;width:100%;z-index:200;
+  height:64px;padding:0 60px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(244,241,234,.96);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+  letter-spacing:.24em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink);
+}
+.nav-back{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink);opacity:.5;
+  display:flex;align-items:center;gap:8px;transition:opacity .2s;
+}
+.nav-back:hover{opacity:1}
+.nav-back::before{content:'←'}
+
+/* Hamburger */
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:all .3s cubic-bezier(.4,0,.2,1);transform-origin:center}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ── PAGE HEADER ── */
+.page-header{
+  padding-top:64px;
+  background:var(--ink);color:var(--bone);
+  text-align:center;padding-bottom:0;
+  position:relative;overflow:hidden;
+}
+.page-header::before{
+  content:'';position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1754257320382-95b43e9f797c?w=1400&q=60') center/cover no-repeat;
+  opacity:.12;
+}
+.page-header-inner{position:relative;z-index:1;padding:52px 24px 0}
+.page-header .eyebrow{
+  font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--clay-soft);display:block;margin-bottom:14px;
+}
+.page-header h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.4rem,6vw,4rem);font-weight:300;
+  color:var(--bone);margin-bottom:10px;
+}
+.page-header h1 em{color:var(--clay-soft)}
+.page-header p{
+  font-size:.82rem;letter-spacing:.06em;color:var(--bone);
+  opacity:.5;margin-bottom:48px;
+}
+
+/* ── STEP INDICATOR ── */
+.step-bar{
+  background:var(--ink);padding:0 60px 40px;
+}
+.steps{
+  display:flex;align-items:center;justify-content:center;
+  gap:0;max-width:560px;margin:0 auto;
+}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1}
+.step-dot{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;letter-spacing:.05em;font-weight:400;
+  background:rgba(244,241,234,.1);color:rgba(244,241,234,.35);
+  border:1px solid rgba(244,241,234,.15);
+  transition:all .35s ease;position:relative;z-index:1;
+}
+.step-item.active .step-dot{
+  background:var(--clay);color:var(--bone);
+  border-color:var(--clay);box-shadow:0 0 0 4px rgba(154,123,95,.25);
+}
+.step-item.done .step-dot{
+  background:rgba(154,123,95,.3);color:var(--clay-soft);
+  border-color:rgba(154,123,95,.4);
+}
+.step-item.done .step-dot::after{content:'✓';font-size:.75rem}
+.step-item.done .step-num{display:none}
+.step-label{
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(244,241,234,.3);white-space:nowrap;transition:color .3s;
+}
+.step-item.active .step-label{color:var(--clay-soft)}
+.step-item.done .step-label{color:rgba(244,241,234,.45)}
+.step-line{
+  flex:1;height:1px;background:rgba(244,241,234,.1);
+  margin-bottom:26px;margin-top:0;transition:background .35s;
+}
+.step-line.done{background:rgba(154,123,95,.35)}
+
+/* ── BOOKING BODY ── */
+.booking-body{
+  max-width:960px;margin:0 auto;
+  padding:56px 24px 80px;
+  min-height:60vh;
+}
+
+/* ── STEP PANELS ── */
+.step-panel{display:none;animation:panelIn .4s ease}
+.step-panel.active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.step-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,3vw,2.2rem);font-weight:300;
+  color:var(--ink);margin-bottom:6px;
+}
+.step-sub{font-size:.8rem;color:var(--ink);opacity:.5;margin-bottom:36px}
+
+/* ── STEP NAV ── */
+.step-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:40px;padding-top:32px;border-top:1px solid var(--border);
+  flex-wrap:wrap;gap:14px;
+}
+.step-nav-right{display:flex;gap:12px;align-items:center;margin-left:auto}
+
+/* ── BUTTONS ── */
+.btn-primary,.btn-ghost,.btn-primary-light,.btn-ghost-light{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Jost',sans-serif;font-size:.62rem;font-weight:400;
+  letter-spacing:.22em;text-transform:uppercase;text-decoration:none;
+  padding:14px 28px;border-radius:var(--r);border:1px solid transparent;
+  transition:all .25s;cursor:pointer;white-space:nowrap;
+}
+.btn-primary{color:var(--bone);background:var(--clay);border-color:var(--clay);box-shadow:var(--shadow)}
+.btn-primary:hover{background:var(--ink);border-color:var(--ink);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.4;pointer-events:none}
+.btn-ghost{color:var(--clay);background:transparent;border-color:rgba(154,123,95,.4)}
+.btn-ghost:hover{background:var(--clay);color:var(--bone);border-color:var(--clay)}
+.btn-primary-light{color:var(--ink);background:var(--clay-soft);border-color:var(--clay-soft);box-shadow:var(--shadow)}
+.btn-primary-light:hover{background:var(--bone);border-color:var(--bone)}
+
+/* ── STEP 1 — SERVICE CARDS ── */
+.services-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:20px;
+}
+.service-card{
+  border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;cursor:pointer;
+  transition:all .3s ease;background:var(--bone-deep);
+  position:relative;
+}
+.service-card:hover{border-color:var(--clay);transform:translateY(-3px);box-shadow:var(--shadow)}
+.service-card.selected{
+  border-color:var(--clay);box-shadow:0 0 0 2px rgba(154,123,95,.25),var(--shadow);
+}
+.service-card-img{position:relative;aspect-ratio:16/9;overflow:hidden}
+.service-card-img img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform 1.2s ease;
+}
+.service-card:hover .service-card-img img,
+.service-card.selected .service-card-img img{transform:scale(1.04)}
+.service-card-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(28,26,23,.65) 0%,transparent 60%);
+}
+.service-check{
+  position:absolute;top:14px;right:14px;z-index:2;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--clay);color:var(--bone);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;opacity:0;transform:scale(0.6);
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+}
+.service-card.selected .service-check{opacity:1;transform:scale(1)}
+.service-card-body{padding:20px}
+.service-card-cat{
+  font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--clay);opacity:.7;display:block;margin-bottom:6px;
+}
+.service-card-name{
+  font-family:'Cormorant Garamond',serif;font-size:1.35rem;
+  font-weight:400;color:var(--ink);margin-bottom:12px;
+}
+.service-card-meta{
+  display:flex;align-items:center;justify-content:space-between;
+}
+.service-card-dur{
+  font-size:.68rem;letter-spacing:.12em;color:var(--ink);opacity:.45;
+}
+.service-card-price{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  color:var(--clay);font-weight:400;
+}
+
+/* ── STEP 2 — DATE & TIME ── */
+.datetime-wrap{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+
+/* Calendar */
+.calendar-wrap{
+  background:var(--bone-deep);border:1px solid var(--border);
+  border-radius:var(--r);padding:28px;
+}
+.cal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;
+}
+.cal-month{
+  font-family:'Cormorant Garamond',serif;font-size:1.2rem;
+  font-weight:400;color:var(--ink);
+}
+.cal-nav{
+  background:none;border:1px solid var(--border);border-radius:6px;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink);opacity:.55;font-size:1rem;
+  transition:all .2s;
+}
+.cal-nav:hover{opacity:1;border-color:var(--clay);color:var(--clay)}
+.cal-nav:disabled{opacity:.2;pointer-events:none}
+.cal-weekdays{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  margin-bottom:8px;
+}
+.cal-weekdays span{
+  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink);opacity:.35;text-align:center;padding:6px 0;
+}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;border-radius:50%;cursor:pointer;color:var(--ink);
+  transition:all .18s;position:relative;
+}
+.cal-day:not(.empty):not(.past):not(.disabled):hover{
+  background:rgba(154,123,95,.15);color:var(--clay);
+}
+.cal-day.today{font-weight:500;color:var(--clay)}
+.cal-day.today::after{
+  content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--clay);
+}
+.cal-day.selected{
+  background:var(--clay);color:var(--bone);font-weight:400;
+}
+.cal-day.selected.today::after{background:var(--bone)}
+.cal-day.past,.cal-day.disabled{opacity:.2;cursor:not-allowed;pointer-events:none}
+.cal-day.empty{pointer-events:none}
+
+/* Time Slots */
+.timeslots-wrap{
+  background:var(--bone-deep);border:1px solid var(--border);
+  border-radius:var(--r);padding:28px;
+}
+.timeslots-wrap h3{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  font-weight:400;color:var(--ink);margin-bottom:6px;
+}
+.timeslots-empty{
+  font-size:.8rem;color:var(--ink);opacity:.4;
+  padding:32px 0;text-align:center;font-style:italic;
+  font-family:'Cormorant Garamond',serif;
+}
+.timeslots-period{margin-bottom:20px}
+.timeslots-period-label{
+  font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--clay);opacity:.6;margin-bottom:10px;display:block;
+}
+.timeslots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.slot{
+  padding:10px 8px;border-radius:6px;border:1px solid var(--border);
+  font-size:.72rem;letter-spacing:.08em;text-align:center;
+  cursor:pointer;color:var(--ink);background:var(--bone);
+  transition:all .2s;
+}
+.slot:hover:not(.unavailable){border-color:var(--clay);color:var(--clay)}
+.slot.selected{background:var(--clay);color:var(--bone);border-color:var(--clay)}
+.slot.unavailable{opacity:.28;cursor:not-allowed;text-decoration:line-through}
+
+/* ── STEP 3 — FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-group.full{grid-column:1/-1}
+.form-label{
+  font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink);opacity:.55;
+}
+.form-input,.form-textarea,.form-select{
+  background:var(--bone-deep);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;
+  font-family:'Jost',sans-serif;font-size:.85rem;font-weight:300;
+  color:var(--ink);outline:none;
+  transition:border-color .2s,box-shadow .2s;width:100%;
+}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--ink);opacity:.3}
+.form-input:focus,.form-textarea:focus,.form-select:focus{
+  border-color:var(--clay);
+  box-shadow:0 0 0 3px rgba(154,123,95,.12);
+}
+.form-input.error,.form-textarea.error{border-color:#c0634c}
+.form-textarea{resize:vertical;min-height:110px}
+.form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a7b5f' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.form-hint{font-size:.68rem;color:var(--ink);opacity:.38;line-height:1.5}
+
+/* Privacy note */
+.form-privacy{
+  margin-top:8px;padding:16px;background:var(--bone-deep);
+  border-radius:6px;border-left:2px solid rgba(154,123,95,.4);
+  font-size:.72rem;color:var(--ink);opacity:.5;line-height:1.65;
+}
+
+/* ── STEP 4 — CONFIRM ── */
+.confirm-layout{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start}
+
+.confirm-summary{
+  background:var(--bone-deep);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);
+}
+.confirm-img{aspect-ratio:16/7;overflow:hidden;position:relative}
+.confirm-img img{width:100%;height:100%;object-fit:cover;display:block}
+.confirm-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(28,26,23,.7) 0%,transparent 55%);
+}
+.confirm-img-label{
+  position:absolute;bottom:16px;left:20px;right:20px;z-index:1;
+}
+.confirm-img-label h3{
+  font-family:'Cormorant Garamond',serif;font-size:1.5rem;
+  font-weight:400;color:var(--bone);
+}
+.confirm-img-label span{font-size:.68rem;color:var(--bone);opacity:.7;letter-spacing:.1em}
+.confirm-body{padding:24px}
+.confirm-row{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid var(--border);gap:12px;
+}
+.confirm-row:last-child{border-bottom:none}
+.confirm-key{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);opacity:.4}
+.confirm-val{font-size:.85rem;color:var(--ink);text-align:right}
+.confirm-edit{
+  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--clay);text-decoration:none;opacity:.7;transition:opacity .2s;
+  cursor:pointer;background:none;border:none;
+}
+.confirm-edit:hover{opacity:1}
+
+.confirm-action-box{
+  background:var(--ink);border-radius:var(--r);padding:28px;
+  box-shadow:var(--shadow);
+}
+.confirm-action-box h3{
+  font-family:'Cormorant Garamond',serif;font-size:1.4rem;
+  font-weight:300;color:var(--bone);margin-bottom:10px;
+}
+.confirm-action-box p{
+  font-size:.78rem;line-height:1.75;color:var(--bone);opacity:.5;margin-bottom:24px;
+}
+.confirm-total{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 0;border-top:1px solid rgba(184,155,127,.15);
+  border-bottom:1px solid rgba(184,155,127,.15);margin-bottom:24px;
+}
+.confirm-total-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone);opacity:.4}
+.confirm-total-price{
+  font-family:'Cormorant Garamond',serif;font-size:1.8rem;
+  font-weight:300;color:var(--clay-soft);
+}
+.confirm-btn-full{width:100%;justify-content:center;font-size:.65rem}
+
+.confirm-note{
+  margin-top:14px;font-size:.68rem;color:var(--bone);
+  opacity:.32;text-align:center;line-height:1.6;
+}
+
+/* ── SUCCESS SCREEN ── */
+.success-screen{
+  display:none;text-align:center;padding:60px 24px;
+  animation:panelIn .5s ease;
+}
+.success-screen.show{display:block}
+.success-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(154,123,95,.15);border:1px solid rgba(154,123,95,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;margin:0 auto 28px;
+  animation:popIn .5s cubic-bezier(.34,1.56,.64,1) .2s both;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+.success-screen h2{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.6rem);
+  font-weight:300;margin-bottom:14px;
+}
+.success-screen p{font-size:.85rem;color:var(--ink);opacity:.55;max-width:460px;margin:0 auto 36px;line-height:1.8}
+.success-card{
+  max-width:400px;margin:0 auto 40px;
+  background:var(--bone-deep);border:1px solid var(--border);
+  border-radius:var(--r);padding:24px;text-align:left;
+}
+.success-card-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid var(--border);font-size:.82rem;
+}
+.success-card-row:last-child{border-bottom:none}
+.success-card-row span:first-child{color:var(--ink);opacity:.42;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase}
+.success-card-row span:last-child{color:var(--ink)}
+
+/* ── FOOTER ── */
+.booking-footer{
+  background:var(--ink-deep);padding:36px 60px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+}
+.booking-footer p{font-size:.68rem;color:rgba(244,241,234,.25);letter-spacing:.06em}
+.booking-footer a{
+  font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--clay-soft);text-decoration:none;opacity:.5;transition:opacity .2s;
+}
+.booking-footer a:hover{opacity:1}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .confirm-layout{grid-template-columns:1fr}
+  .confirm-action-box{order:-1}
+}
+
+@media(max-width:768px){
+  nav{padding:0 20px;height:60px}
+  .nav-back span{display:none}
+  .step-bar{padding:0 16px 28px}
+  .step-label{display:none}
+  .steps{gap:0}
+  .page-header-inner{padding:36px 20px 0}
+  .services-grid{grid-template-columns:1fr;gap:14px}
+  .datetime-wrap{grid-template-columns:1fr;gap:16px}
+  .calendar-wrap,.timeslots-wrap{padding:20px}
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .booking-body{padding:36px 16px 60px}
+  .step-nav{flex-direction:column}
+  .step-nav .btn-ghost,.step-nav .btn-primary{width:100%;justify-content:center}
+  .step-nav-right{width:100%;flex-direction:column}
+  .step-nav-right .btn-primary{width:100%;justify-content:center}
+  .confirm-body{padding:18px}
+  .confirm-row{flex-wrap:wrap}
+  .confirm-val{text-align:left}
+  .confirm-action-box{padding:22px}
+  .booking-footer{padding:28px 20px;flex-direction:column;text-align:center}
+}
+
+@media(max-width:480px){
+  .timeslots-grid{grid-template-columns:repeat(2,1fr)}
+  .cal-day{font-size:.72rem}
+  .page-header h1{font-size:2rem}
+  .step-dot{width:28px;height:28px}
+  .step-line{margin-bottom:18px}
+  .success-screen{padding:40px 16px}
+  .success-icon{width:56px;height:56px;font-size:1.2rem}
+  .success-card{padding:16px}
+}
+
+@media(max-width:380px){
+  .calendar-wrap,.timeslots-wrap{padding:14px 12px}
+  .cal-day{font-size:.65rem}
+  .slot{font-size:.65rem;padding:9px 6px}
+  .confirm-action-box h3{font-size:1.2rem}
+  .confirm-total-price{font-size:1.5rem}
+  .page-header h1{font-size:1.75rem}
+}
+
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Nirvana</a>
+  <a href="index.html" class="nav-back"><span>Back to site</span></a>
+  <button class="hamburger" style="display:none" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <span class="eyebrow">Nirvana Studio</span>
+    <h1>Reserve your <em>space</em></h1>
+    <p>A few moments to secure your place in our studio.</p>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="step-bar">
+    <div class="steps">
+      <div class="step-item active" id="si1">
+        <div class="step-dot"><span class="step-num">1</span></div>
+        <span class="step-label">Service</span>
+      </div>
+      <div class="step-line" id="sl1"></div>
+      <div class="step-item" id="si2">
+        <div class="step-dot"><span class="step-num">2</span></div>
+        <span class="step-label">Date &amp; Time</span>
+      </div>
+      <div class="step-line" id="sl2"></div>
+      <div class="step-item" id="si3">
+        <div class="step-dot"><span class="step-num">3</span></div>
+        <span class="step-label">Details</span>
+      </div>
+      <div class="step-line" id="sl3"></div>
+      <div class="step-item" id="si4">
+        <div class="step-dot"><span class="step-num">4</span></div>
+        <span class="step-label">Confirm</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKING BODY -->
+<main class="booking-body" id="bookingBody">
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✦</div>
+    <h2>Your booking is <em>confirmed</em></h2>
+    <p>We have received your reservation and will send a confirmation to your email address shortly. We look forward to welcoming you.</p>
+    <div class="success-card" id="successCard"></div>
+    <a href="index.html" class="btn-primary">Return to Nirvana</a>
+  </div>
+
+  <!-- STEP 1: SERVICE -->
+  <div class="step-panel active" id="step1">
+    <p class="step-heading">Choose your <em>service</em></p>
+    <p class="step-sub">Select the treatment you would like to book.</p>
+
+    <div class="services-grid">
+      <div class="service-card" data-service="Restorative Touch" data-duration="60 — 90 min" data-price="From R680" data-cat="Bodywork" onclick="selectService(this)">
+        <div class="service-card-img">
+          <img src="https://images.unsplash.com/photo-1747239202356-764770773c9a?w=700&q=75" alt="Restorative Touch" loading="lazy">
+          <span class="service-check">✓</span>
+        </div>
+        <div class="service-card-body">
+          <span class="service-card-cat">Bodywork</span>
+          <div class="service-card-name">Restorative Touch</div>
+          <div class="service-card-meta">
+            <span class="service-card-dur">60 — 90 min</span>
+            <span class="service-card-price">From R680</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-card" data-service="Float & Surrender" data-duration="60 — 90 min" data-price="From R750" data-cat="Float Therapy" onclick="selectService(this)">
+        <div class="service-card-img">
+          <img src="https://images.unsplash.com/photo-1754257319789-f6fa7c284ba2?w=700&q=75" alt="Float & Surrender" loading="lazy">
+          <span class="service-check">✓</span>
+        </div>
+        <div class="service-card-body">
+          <span class="service-card-cat">Float Therapy</span>
+          <div class="service-card-name">Float &amp; Surrender</div>
+          <div class="service-card-meta">
+            <span class="service-card-dur">60 — 90 min</span>
+            <span class="service-card-price">From R750</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-card" data-service="Reformer Pilates" data-duration="55 min" data-price="From R320" data-cat="Pilates" onclick="selectService(this)">
+        <div class="service-card-img">
+          <img src="https://images.unsplash.com/photo-1747240549807-fc3962949818?w=700&q=75" alt="Reformer Pilates" loading="lazy">
+          <span class="service-check">✓</span>
+        </div>
+        <div class="service-card-body">
+          <span class="service-card-cat">Pilates</span>
+          <div class="service-card-name">Reformer Pilates</div>
+          <div class="service-card-meta">
+            <span class="service-card-dur">55 min</span>
+            <span class="service-card-price">From R320</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-card" data-service="Guided Meditation" data-duration="40 min" data-price="From R220" data-cat="Mindfulness" onclick="selectService(this)">
+        <div class="service-card-img">
+          <img src="https://plus.unsplash.com/premium_photo-1666264200744-51f90d07c09e?w=700&q=75" alt="Guided Meditation" loading="lazy">
+          <span class="service-check">✓</span>
+        </div>
+        <div class="service-card-body">
+          <span class="service-card-cat">Mindfulness</span>
+          <div class="service-card-name">Guided Meditation</div>
+          <div class="service-card-meta">
+            <span class="service-card-dur">40 min</span>
+            <span class="service-card-price">From R220</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <span></span>
+      <div class="step-nav-right">
+        <button class="btn-primary" id="s1next" onclick="goTo(2)" disabled>Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: DATE & TIME -->
+  <div class="step-panel" id="step2">
+    <p class="step-heading">Choose a <em>date &amp; time</em></p>
+    <p class="step-sub">Select an available date and your preferred time slot.</p>
+
+    <div class="datetime-wrap">
+      <!-- Calendar -->
+      <div class="calendar-wrap">
+        <div class="cal-header">
+          <button class="cal-nav" id="calPrev" onclick="calPrev()">‹</button>
+          <span class="cal-month" id="calMonth"></span>
+          <button class="cal-nav" id="calNext" onclick="calNext()">›</button>
+        </div>
+        <div class="cal-weekdays">
+          <span>Mo</span><span>Tu</span><span>We</span>
+          <span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+
+      <!-- Time Slots -->
+      <div class="timeslots-wrap">
+        <h3 id="slotsHeading">Select a date</h3>
+        <p style="font-size:.72rem;color:var(--ink);opacity:.38;margin-top:4px;margin-bottom:0" id="slotsSubtext">Available times will appear here.</p>
+        <div id="slotsContainer"><div class="timeslots-empty">Please choose a date first</div></div>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="goTo(1)">← Back</button>
+      <div class="step-nav-right">
+        <button class="btn-primary" id="s2next" onclick="goTo(3)" disabled>Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: DETAILS -->
+  <div class="step-panel" id="step3">
+    <p class="step-heading">Your <em>details</em></p>
+    <p class="step-sub">A little about you so we can prepare for your visit.</p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label" for="fname">First name *</label>
+        <input class="form-input" id="fname" type="text" placeholder="Your first name" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="lname">Last name *</label>
+        <input class="form-input" id="lname" type="text" placeholder="Your last name" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email address *</label>
+        <input class="form-input" id="email" type="email" placeholder="hello@example.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="phone">Phone number</label>
+        <input class="form-input" id="phone" type="tel" placeholder="+27 00 000 0000">
+      </div>
+      <div class="form-group full">
+        <label class="form-label" for="experience">Experience level</label>
+        <select class="form-select form-input" id="experience">
+          <option value="" disabled selected>Select your level</option>
+          <option value="First time">First time — I am completely new</option>
+          <option value="Beginner">Beginner — some experience</option>
+          <option value="Intermediate">Intermediate — regular practitioner</option>
+          <option value="Advanced">Advanced — experienced practitioner</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label class="form-label" for="notes">Notes or requests <span style="opacity:.45;font-size:.6rem;">(optional)</span></label>
+        <textarea class="form-textarea" id="notes" placeholder="Any injuries, health conditions, or preferences we should know about…"></textarea>
+        <span class="form-hint">This helps our practitioners prepare a session tailored to you.</span>
+      </div>
+    </div>
+
+    <div class="form-privacy">
+      Your information is used solely to manage your booking and communicate with you about your session. We do not share your details with third parties.
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="goTo(2)">← Back</button>
+      <div class="step-nav-right">
+        <button class="btn-primary" onclick="goToConfirm()">Review Booking →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: CONFIRM -->
+  <div class="step-panel" id="step4">
+    <p class="step-heading">Review &amp; <em>confirm</em></p>
+    <p class="step-sub">Please check your booking details before confirming.</p>
+
+    <div class="confirm-layout">
+      <!-- Summary card -->
+      <div class="confirm-summary" id="confirmSummary">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- Action box -->
+      <div class="confirm-action-box">
+        <h3>Ready to <em style="color:var(--clay-soft)">book?</em></h3>
+        <p>Once confirmed, we will send a booking summary and directions to your email address.</p>
+        <div class="confirm-total">
+          <span class="confirm-total-label">Session total</span>
+          <span class="confirm-total-price" id="confirmPrice">—</span>
+        </div>
+        <button class="btn-primary-light confirm-btn-full" onclick="confirmBooking()">Confirm Booking</button>
+        <p class="confirm-note">Free cancellation up to 24 hours before your session.</p>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-ghost" onclick="goTo(3)">← Edit details</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="booking-footer">
+  <p>© 2026 Nirvana Pilates. All rights reserved.</p>
+  <a href="index.html">Return to site</a>
+</footer>
+
+<script>
+/* ─── STATE ─── */
+let currentStep = 1;
+let booking = {
+  service: null, duration: null, price: null, cat: null,
+  date: null, time: null,
+  fname: '', lname: '', email: '', phone: '', experience: '', notes: ''
+};
+
+/* ─── STEP NAVIGATION ─── */
+function goTo(n) {
+  if (n === 3 && !validateStep3Light()) return;
+
+  const old = document.getElementById('step' + currentStep);
+  const next = document.getElementById('step' + n);
+  old.classList.remove('active');
+  next.classList.add('active');
+  currentStep = n;
+
+  // Update indicators
+  for (let i = 1; i <= 4; i++) {
+    const si = document.getElementById('si' + i);
+    const sl = document.getElementById('sl' + i);
+    si.classList.remove('active','done');
+    if (sl) sl.classList.remove('done');
+    if (i < n) { si.classList.add('done'); if (sl) sl.classList.add('done'); }
+    if (i === n) si.classList.add('active');
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToConfirm() {
+  if (!validateStep3()) return;
+  collectDetails();
+  buildConfirmScreen();
+  goTo(4);
+}
+
+/* ─── STEP 1: SERVICE ─── */
+function selectService(el) {
+  document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.service  = el.dataset.service;
+  booking.duration = el.dataset.duration;
+  booking.price    = el.dataset.price;
+  booking.cat      = el.dataset.cat;
+  document.getElementById('s1next').disabled = false;
+}
+
+/* ─── STEP 2: CALENDAR ─── */
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const SLOT_DATA = {
+  morning:   ['06:00','07:30','09:00','10:30'],
+  afternoon: ['12:00','13:30','15:00','16:30'],
+  evening:   ['18:00','19:30'],
+};
+const UNAVAILABLE = ['07:30','13:30','19:30']; // mock unavailable
+
+let calView = new Date();
+calView.setDate(1);
+let selectedDate = null;
+let selectedTime = null;
+
+function renderCalendar() {
+  const y = calView.getFullYear();
+  const m = calView.getMonth();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  document.getElementById('calMonth').textContent = MONTHS[m] + ' ' + y;
+
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  let firstDay = new Date(y, m, 1).getDay();
+  firstDay = firstDay === 0 ? 6 : firstDay - 1; // Monday start
+
+  let html = '';
+  for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(y, m, d);
+    const isPast = date < today;
+    const isToday = date.toDateString() === today.toDateString();
+    const isSel = selectedDate && date.toDateString() === selectedDate.toDateString();
+    const isSun = date.getDay() === 0;
+    let cls = 'cal-day';
+    if (isPast || isSun) cls += ' disabled';
+    if (isToday) cls += ' today';
+    if (isSel) cls += ' selected';
+    const onclick = (!isPast && !isSun)
+      ? `onclick="pickDate(new Date(${y},${m},${d}))"`
+      : '';
+    html += `<div class="${cls}" ${onclick}>${d}</div>`;
+  }
+
+  document.getElementById('calGrid').innerHTML = html;
+
+  // Prev button disabled if current month
+  const nowMonth = new Date(); nowMonth.setDate(1); nowMonth.setHours(0,0,0,0);
+  document.getElementById('calPrev').disabled = calView <= nowMonth;
+}
+
+function calPrev() {
+  calView = new Date(calView.getFullYear(), calView.getMonth() - 1, 1);
+  renderCalendar();
+}
+function calNext() {
+  calView = new Date(calView.getFullYear(), calView.getMonth() + 1, 1);
+  renderCalendar();
+}
+
+function pickDate(date) {
+  selectedDate = date;
+  selectedTime = null;
+  booking.date = null;
+  booking.time = null;
+  document.getElementById('s2next').disabled = true;
+  renderCalendar();
+  renderSlots(date);
+}
+
+function renderSlots(date) {
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('slotsHeading').textContent = dayNames[date.getDay()] + ', ' + date.getDate() + ' ' + MONTHS[date.getMonth()];
+  document.getElementById('slotsSubtext').textContent = 'All times are in SAST (GMT+2).';
+
+  let html = '';
+  const periods = [
+    { label: 'Morning', slots: SLOT_DATA.morning },
+    { label: 'Afternoon', slots: SLOT_DATA.afternoon },
+    { label: 'Evening', slots: SLOT_DATA.evening },
+  ];
+
+  periods.forEach(p => {
+    html += `<div class="timeslots-period" style="margin-top:20px">
+      <span class="timeslots-period-label">${p.label}</span>
+      <div class="timeslots-grid">`;
+    p.slots.forEach(t => {
+      const unavail = UNAVAILABLE.includes(t);
+      const sel = selectedTime === t;
+      let cls = 'slot';
+      if (unavail) cls += ' unavailable';
+      if (sel) cls += ' selected';
+      const onclick = !unavail ? `onclick="pickTime('${t}')"` : '';
+      html += `<div class="${cls}" ${onclick}>${t}</div>`;
+    });
+    html += '</div></div>';
+  });
+
+  document.getElementById('slotsContainer').innerHTML = html;
+}
+
+function pickTime(t) {
+  selectedTime = t;
+  booking.time = t;
+  booking.date = selectedDate.toLocaleDateString('en-ZA', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  renderSlots(selectedDate);
+  document.getElementById('s2next').disabled = false;
+}
+
+/* ─── STEP 3: VALIDATION ─── */
+function validateStep3Light() { return true; } // light check before navigating back to 3
+
+function validateStep3() {
+  let ok = true;
+  const fields = [
+    { id: 'fname', label: 'First name' },
+    { id: 'lname', label: 'Last name' },
+    { id: 'email', label: 'Email' },
+  ];
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      ok = false;
+    } else {
+      el.classList.remove('error');
+    }
+  });
+  const emailEl = document.getElementById('email');
+  if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+    emailEl.classList.add('error');
+    ok = false;
+  }
+  if (!ok) {
+    document.getElementById('step3').querySelector('.form-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  return ok;
+}
+
+function collectDetails() {
+  booking.fname      = document.getElementById('fname').value.trim();
+  booking.lname      = document.getElementById('lname').value.trim();
+  booking.email      = document.getElementById('email').value.trim();
+  booking.phone      = document.getElementById('phone').value.trim();
+  booking.experience = document.getElementById('experience').value;
+  booking.notes      = document.getElementById('notes').value.trim();
+}
+
+/* ─── STEP 4: CONFIRM SCREEN ─── */
+function buildConfirmScreen() {
+  // Find image for selected service
+  const imgMap = {
+    'Restorative Touch': 'https://images.unsplash.com/photo-1747239202356-764770773c9a?w=700&q=75',
+    'Float & Surrender': 'https://images.unsplash.com/photo-1754257319789-f6fa7c284ba2?w=700&q=75',
+    'Reformer Pilates':  'https://images.unsplash.com/photo-1747240549807-fc3962949818?w=700&q=75',
+    'Guided Meditation': 'https://plus.unsplash.com/premium_photo-1666264200744-51f90d07c09e?w=700&q=75',
+  };
+
+  const rows = [
+    { k: 'Service',   v: booking.service,  edit: 1 },
+    { k: 'Category',  v: booking.cat,      edit: null },
+    { k: 'Duration',  v: booking.duration, edit: null },
+    { k: 'Date',      v: booking.date,     edit: 2 },
+    { k: 'Time',      v: booking.time,     edit: 2 },
+    { k: 'Name',      v: booking.fname + ' ' + booking.lname, edit: 3 },
+    { k: 'Email',     v: booking.email,    edit: 3 },
+    { k: 'Phone',     v: booking.phone || '—', edit: 3 },
+    { k: 'Level',     v: booking.experience || '—', edit: 3 },
+    { k: 'Notes',     v: booking.notes || '—', edit: 3 },
+  ];
+
+  const rowsHTML = rows.map(r =>
+    `<div class="confirm-row">
+      <span class="confirm-key">${r.k}</span>
+      <span style="display:flex;align-items:center;gap:12px">
+        <span class="confirm-val">${r.v}</span>
+        ${r.edit ? `<button class="confirm-edit" onclick="goTo(${r.edit})">Edit</button>` : ''}
+      </span>
+    </div>`
+  ).join('');
+
+  document.getElementById('confirmSummary').innerHTML = `
+    <div class="confirm-img">
+      <img src="${imgMap[booking.service] || ''}" alt="${booking.service}" loading="lazy">
+      <div class="confirm-img-label">
+        <h3>${booking.service}</h3>
+        <span>${booking.cat}</span>
+      </div>
+    </div>
+    <div class="confirm-body">${rowsHTML}</div>
+  `;
+
+  document.getElementById('confirmPrice').textContent = booking.price;
+}
+
+/* ─── SUBMIT ─── */
+function confirmBooking() {
+  // Show success
+  document.getElementById('step4').classList.remove('active');
+  const ss = document.getElementById('successScreen');
+  ss.classList.add('show');
+
+  // Update indicators — all done
+  for (let i = 1; i <= 4; i++) {
+    const si = document.getElementById('si' + i);
+    const sl = document.getElementById('sl' + i);
+    si.classList.remove('active');
+    si.classList.add('done');
+    if (sl) sl.classList.add('done');
+  }
+
+  // Build success card
+  document.getElementById('successCard').innerHTML = `
+    <div class="success-card-row"><span>Service</span><span>${booking.service}</span></div>
+    <div class="success-card-row"><span>Date</span><span>${booking.date}</span></div>
+    <div class="success-card-row"><span>Time</span><span>${booking.time}</span></div>
+    <div class="success-card-row"><span>Confirmation sent to</span><span>${booking.email}</span></div>
+  `;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─── INIT ─── */
+renderCalendar();
+
+// Live input error clearing
+['fname','lname','email'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    this.classList.remove('error');
+  });
+});
+</script>
+</body>
+</html>

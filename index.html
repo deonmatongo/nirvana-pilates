@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nirvana — Pilates &amp; Wellness Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <noscript><style>.fade-up,.stagger>*{opacity:1!important;transform:none!important}</style></noscript>
+  <style>
+
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+/* ── TOKENS ── */
+:root{
+  --bone:      #f4f1ea;
+  --bone-deep: #e9e4d8;
+  --ink:       #1c1a17;
+  --ink-deep:  #100f0d;
+  --clay:      #9a7b5f;
+  --clay-soft: #b89b7f;
+  --sage:      #7d8471;
+  --border:    rgba(28,26,23,.14);
+  --shadow:    0 24px 60px -28px rgba(28,26,23,.35);
+  --r:         8px;
+}
+
+body{font-family:'Jost',sans-serif;background:var(--bone);color:var(--ink);font-weight:300;overflow-x:hidden}
+
+/* clay italic in every heading */
+h1 em,h2 em,h3 em{font-style:italic;color:var(--clay)}
+
+/* ── ANIMATIONS ── */
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
+.fade-up.visible{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.stagger>*.visible{opacity:1;transform:none}
+.stagger>*:nth-child(2){transition-delay:.1s}
+.stagger>*:nth-child(3){transition-delay:.2s}
+.stagger>*:nth-child(4){transition-delay:.3s}
+.stagger>*:nth-child(5){transition-delay:.4s}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;width:100%;z-index:200;
+  height:66px;padding:0 60px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(244,241,234,.95);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+  letter-spacing:.24em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink);flex-shrink:0;
+}
+.nav-center{display:flex;gap:40px;list-style:none}
+.nav-center a{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink);opacity:.5;transition:opacity .2s;
+}
+.nav-center a:hover{opacity:1}
+.nav-cta{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  text-decoration:none;color:var(--clay);
+  border:1px solid rgba(154,123,95,.5);padding:10px 24px;border-radius:var(--r);
+  transition:all .22s;flex-shrink:0;
+}
+.nav-cta:hover{background:var(--clay);color:var(--bone);border-color:var(--clay)}
+
+/* hamburger */
+.hamburger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:40px;height:40px;cursor:pointer;background:none;border:none;padding:4px;
+}
+.hamburger span{
+  display:block;width:22px;height:1.5px;background:var(--ink);
+  transition:all .3s cubic-bezier(.4,0,.2,1);transform-origin:center;
+}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* mobile menu */
+.mobile-menu{
+  display:none;position:fixed;top:66px;left:0;right:0;z-index:199;
+  background:rgba(244,241,234,.98);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:28px 24px 36px;
+  opacity:0;transform:translateY(-10px);pointer-events:none;
+  transition:opacity .3s ease,transform .35s cubic-bezier(.4,0,.2,1);
+}
+.mobile-menu.open{opacity:1;transform:translateY(0);pointer-events:all}
+.mobile-menu ul{list-style:none;margin-bottom:24px}
+.mobile-menu ul li{border-bottom:1px solid var(--border)}
+.mobile-menu ul li:first-child{border-top:1px solid var(--border)}
+.mobile-menu ul a{
+  display:block;padding:17px 0;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink);opacity:.6;transition:opacity .2s;
+}
+.mobile-menu ul a:hover{opacity:1}
+.mobile-menu .nav-cta{display:block;text-align:center;padding:15px 24px;width:100%}
+
+/* ── HERO ── */
+.hero{
+  min-height:100svh;display:flex;align-items:center;justify-content:center;
+  text-align:center;position:relative;overflow:hidden;background:var(--ink);
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('https://plus.unsplash.com/premium_photo-1663133881189-dddcf2268db0?w=1800&q=80') center/cover no-repeat;
+  opacity:.4;transform:scale(1.05);transition:transform 9s ease;
+}
+.hero.loaded .hero-bg{transform:scale(1)}
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(28,26,23,.75) 0%,rgba(28,26,23,.1) 55%,rgba(28,26,23,.25) 100%);
+}
+.hero-content{position:relative;z-index:2;color:var(--bone);padding:0 24px;max-width:860px}
+.eyebrow{
+  font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--clay-soft);display:block;margin-bottom:28px;
+}
+.hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(4rem,12vw,9rem);
+  font-weight:300;line-height:.9;letter-spacing:.04em;
+  color:var(--bone);margin-bottom:20px;
+}
+.hero h1 em{color:var(--clay-soft)}
+.hero-sub{
+  font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;
+  opacity:.52;display:block;margin-bottom:52px;
+}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+.scroll-hint{
+  font-size:.62rem;letter-spacing:.38em;text-transform:uppercase;
+  color:var(--clay-soft);text-decoration:none;opacity:.65;
+  display:inline-flex;align-items:center;gap:14px;transition:opacity .2s;
+}
+.scroll-hint:hover{opacity:1}
+.scroll-hint::after{content:'';width:40px;height:1px;background:currentColor}
+
+/* ── MARQUEE ── */
+.marquee-bar{
+  background:var(--ink-deep);padding:18px 0;overflow:hidden;
+  border-top:1px solid rgba(184,155,127,.07);
+  border-bottom:1px solid rgba(184,155,127,.07);
+}
+.marquee-track{display:flex;width:max-content;animation:marquee 38s linear infinite}
+.marquee-track:hover{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;font-weight:300;color:var(--clay-soft);
+  letter-spacing:.06em;white-space:nowrap;
+}
+.marquee-dot{display:inline-block;margin:0 26px;color:var(--clay);opacity:.4}
+
+/* ── SHARED ── */
+.section-label{
+  font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--clay);display:block;margin-bottom:16px;
+}
+.section-label-light{color:var(--clay-soft);opacity:.85}
+
+/* ── BUTTON SYSTEM ── */
+.btn-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.btn-row-center{justify-content:center}
+
+.btn-primary,.btn-ghost,.btn-primary-light,.btn-ghost-light{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Jost',sans-serif;font-size:.62rem;font-weight:400;
+  letter-spacing:.24em;text-transform:uppercase;text-decoration:none;
+  padding:15px 32px;border-radius:var(--r);border:1px solid transparent;
+  transition:all .25s;cursor:pointer;white-space:nowrap;
+}
+/* filled / light bg */
+.btn-primary{color:var(--bone);background:var(--clay);border-color:var(--clay);box-shadow:var(--shadow)}
+.btn-primary:hover{background:var(--ink);border-color:var(--ink);transform:translateY(-2px)}
+/* ghost / light bg */
+.btn-ghost{color:var(--clay);background:transparent;border-color:rgba(154,123,95,.45)}
+.btn-ghost:hover{background:var(--clay);color:var(--bone);border-color:var(--clay);transform:translateY(-2px)}
+/* filled / dark bg */
+.btn-primary-light{color:var(--ink);background:var(--clay-soft);border-color:var(--clay-soft);box-shadow:var(--shadow)}
+.btn-primary-light:hover{background:var(--bone);border-color:var(--bone);transform:translateY(-2px)}
+/* ghost / dark bg */
+.btn-ghost-light{color:var(--clay-soft);background:transparent;border-color:rgba(184,155,127,.4)}
+.btn-ghost-light:hover{background:var(--clay-soft);color:var(--ink);border-color:var(--clay-soft);transform:translateY(-2px)}
+
+.text-link{
+  font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;
+  text-decoration:none;color:var(--clay);display:inline-flex;align-items:center;gap:9px;
+  border-bottom:1px solid rgba(154,123,95,.4);padding-bottom:3px;transition:opacity .2s;
+}
+.text-link:hover{opacity:.55}
+
+/* ── OFFERINGS ── */
+.offerings{padding:120px 60px;background:var(--bone)}
+.offerings-hd{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  max-width:1200px;margin:0 auto 64px;
+}
+.offerings-hd h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.4rem,5vw,4rem);font-weight:300;line-height:1.05;
+}
+.offerings-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:28px;max-width:1200px;margin:0 auto;
+}
+
+/* card */
+.card{
+  border-radius:var(--r);overflow:hidden;background:var(--bone-deep);
+  box-shadow:0 4px 24px -8px rgba(28,26,23,.1);
+  transition:transform .4s cubic-bezier(.25,.46,.45,.94),box-shadow .4s ease;
+  cursor:pointer;
+}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.card-img{position:relative;aspect-ratio:4/3;overflow:hidden}
+.card-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(28,26,23,.78) 0%,transparent 55%);z-index:1;
+}
+.card-img img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform 1.2s ease;
+}
+.card:hover .card-img img{transform:scale(1.07)}
+.card-badge{
+  position:absolute;top:16px;right:16px;z-index:2;
+  font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--bone);background:rgba(154,123,95,.78);
+  padding:5px 12px;border-radius:4px;backdrop-filter:blur(6px);
+}
+.card-badge-sage{background:rgba(125,132,113,.78)}
+.card-meta{
+  position:absolute;bottom:16px;left:16px;right:16px;z-index:2;
+  display:flex;justify-content:space-between;
+  font-size:.68rem;letter-spacing:.14em;color:var(--bone);opacity:.82;
+}
+.card-hover-btn{
+  position:absolute;bottom:0;left:0;right:0;z-index:3;
+  display:flex;justify-content:center;padding:16px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .35s ease,transform .35s ease;
+}
+.card:hover .card-hover-btn{opacity:1;transform:translateY(0)}
+.card-hover-btn a{
+  font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink);background:var(--clay-soft);
+  padding:10px 22px;border-radius:6px;transition:background .2s;
+}
+.card-hover-btn a:hover{background:var(--bone)}
+.card-body{padding:24px}
+.card-cat{
+  font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--clay);opacity:.7;display:block;margin-bottom:8px;
+}
+.card-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.6rem;
+  font-weight:400;line-height:1.15;margin-bottom:10px;color:var(--ink);
+}
+.card-desc{font-size:.8rem;line-height:1.75;color:var(--ink);opacity:.52;margin-bottom:18px}
+
+.offerings-footer{max-width:1200px;margin:56px auto 0;display:flex;justify-content:center}
+
+/* ── ABOUT ── */
+.about{
+  padding:120px 60px;background:var(--ink);color:var(--bone);
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+.about-img-wrap{position:relative}
+.about-img{aspect-ratio:3/4;overflow:hidden;border-radius:var(--r);box-shadow:var(--shadow)}
+.about-img img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform 1.2s ease;
+}
+.about-img-wrap:hover .about-img img{transform:scale(1.04)}
+.about-accent{
+  position:absolute;bottom:-24px;right:-24px;width:110px;height:110px;
+  border-radius:50%;border:1px solid rgba(184,155,127,.18);
+  background:rgba(154,123,95,.08);pointer-events:none;
+}
+.about h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3.2rem);font-weight:300;line-height:1.2;
+  margin-bottom:26px;color:var(--bone);
+}
+.about h2 em{color:var(--clay-soft)}
+.about p{font-size:.85rem;line-height:1.85;color:var(--bone);opacity:.56;margin-bottom:16px}
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:28px;
+  padding-top:40px;border-top:1px solid rgba(184,155,127,.18);
+}
+.stat-num{
+  font-family:'Cormorant Garamond',serif;font-size:3rem;
+  font-weight:300;color:var(--clay-soft);margin-bottom:4px;line-height:1;
+}
+.stat-lbl{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--bone);opacity:.35}
+
+/* ── CLASSES ── */
+.classes{padding:120px 60px;background:var(--bone-deep)}
+.classes-hd{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  max-width:1200px;margin:0 auto 52px;
+}
+.classes-hd h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3.2rem);font-weight:300;color:var(--ink);
+}
+.class-list{max-width:1200px;margin:0 auto}
+.class-row{
+  position:relative;display:grid;
+  grid-template-columns:52px 1fr auto auto;
+  gap:32px;align-items:center;
+  padding:26px 0;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:opacity .2s;
+}
+.class-row:first-child{border-top:1px solid var(--border)}
+.class-row:hover{opacity:1}
+.class-row:hover .class-info h3{color:var(--clay)}
+.class-row:hover .class-lvl{opacity:0}
+.class-row:hover .class-book{opacity:1}
+.class-num{
+  font-family:'Cormorant Garamond',serif;font-size:.8rem;
+  color:var(--clay);opacity:.4;letter-spacing:.1em;
+}
+.class-info h3{
+  font-family:'Cormorant Garamond',serif;font-size:1.35rem;
+  font-weight:400;color:var(--ink);margin-bottom:4px;transition:color .2s;
+}
+.class-info p{font-size:.72rem;color:var(--ink);opacity:.4;letter-spacing:.04em}
+.class-dur{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);opacity:.3}
+.class-lvl{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  border:1px solid rgba(154,123,95,.3);color:var(--clay);
+  padding:6px 14px;border-radius:4px;transition:opacity .2s;
+  white-space:nowrap;
+}
+.class-book{
+  position:absolute;right:0;
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--bone);background:var(--clay);padding:8px 18px;
+  border-radius:6px;text-decoration:none;
+  opacity:0;transition:opacity .25s;white-space:nowrap;
+}
+.classes-footer{max-width:1200px;margin:48px auto 0}
+
+/* ── TESTIMONIALS ── */
+.testimonials{padding:120px 60px;background:var(--bone)}
+.testi-hd{text-align:center;margin-bottom:64px}
+.testi-hd h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3.2rem);font-weight:300;color:var(--ink);
+}
+.testi-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:24px;max-width:1200px;margin:0 auto 52px;
+}
+.testi{
+  padding:34px;background:var(--bone-deep);
+  border-radius:var(--r);box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  transition:transform .3s ease;
+}
+.testi:hover{transform:translateY(-4px)}
+.testi-stars{display:flex;gap:3px;margin-bottom:18px}
+.testi-stars span{color:var(--clay);font-size:.75rem}
+.testi blockquote{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  font-weight:300;line-height:1.75;font-style:italic;
+  color:var(--ink);margin-bottom:20px;
+}
+.testi cite{
+  font-size:.65rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--clay);opacity:.6;font-style:normal;
+}
+.testi-footer{text-align:center}
+
+/* ── BOOKING ── */
+.booking{
+  padding:140px 60px;background:var(--ink);
+  color:var(--bone);text-align:center;position:relative;overflow:hidden;
+}
+.booking::before,.booking::after{
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);border-radius:50%;
+  border:1px solid rgba(184,155,127,.05);pointer-events:none;
+}
+.booking::before{width:560px;height:560px}
+.booking::after{width:900px;height:900px}
+.booking-inner{position:relative;z-index:1}
+.booking h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,8vw,6rem);font-weight:300;
+  line-height:.95;margin-bottom:26px;color:var(--bone);
+}
+.booking h2 em{color:var(--clay-soft)}
+.booking p{
+  font-size:.85rem;line-height:1.85;color:var(--bone);
+  opacity:.5;max-width:420px;margin:0 auto 48px;
+}
+
+/* ── FOOTER ── */
+footer{
+  padding:72px 60px 0;background:var(--ink-deep);color:var(--bone);
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:60px;
+}
+.footer-brand .nav-logo{color:var(--bone);display:block;margin-bottom:16px}
+.footer-brand p{
+  font-size:.78rem;color:var(--bone);opacity:.32;
+  line-height:1.85;max-width:220px;margin-bottom:22px;
+}
+.footer-social{display:flex;gap:18px}
+.footer-social a{
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--clay-soft);text-decoration:none;opacity:.5;transition:opacity .2s;
+}
+.footer-social a:hover{opacity:1}
+.footer-col h4{
+  font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--clay-soft);opacity:.55;margin-bottom:22px;
+}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:11px}
+.footer-col a{font-size:.8rem;color:var(--bone);text-decoration:none;opacity:.44;transition:opacity .2s}
+.footer-col a:hover{opacity:1}
+.footer-btm{
+  padding:22px 60px;background:var(--ink-deep);
+  border-top:1px solid rgba(184,155,127,.09);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-btm p{font-size:.65rem;color:rgba(244,241,234,.22);letter-spacing:.06em}
+
+/* ────────────────────────────
+   RESPONSIVE
+──────────────────────────── */
+
+/* Tablet */
+@media(max-width:1024px){
+  nav{padding:0 32px}
+  .offerings,.classes,.testimonials,.booking{padding:96px 40px}
+  .about{padding:96px 40px;gap:52px}
+  footer{padding:64px 40px 0}
+  .footer-btm{padding:22px 40px}
+}
+
+/* Mobile */
+@media(max-width:768px){
+  /* nav */
+  nav{padding:0 20px;height:60px}
+  .nav-center,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .mobile-menu{display:block;top:60px}
+
+  /* hero */
+  .hero-actions{flex-direction:column;align-items:center}
+  .hero-actions .btn-primary-light,
+  .hero-actions .btn-ghost-light{width:100%;max-width:320px;justify-content:center}
+
+  /* marquee */
+  .marquee-text{font-size:.88rem}
+
+  /* offerings */
+  .offerings{padding:72px 20px}
+  .offerings-hd{flex-direction:column;align-items:flex-start;gap:14px;margin-bottom:40px}
+  .offerings-grid{grid-template-columns:1fr;gap:18px}
+  .offerings-footer .btn-row{flex-direction:column;width:100%}
+  .offerings-footer .btn-primary,
+  .offerings-footer .btn-ghost{width:100%;justify-content:center}
+
+  /* about */
+  .about{padding:72px 20px;grid-template-columns:1fr;gap:44px}
+  .about-img{aspect-ratio:4/3}
+  .about-accent{display:none}
+  .stats{grid-template-columns:repeat(3,1fr);gap:16px}
+  .stat-num{font-size:2.4rem}
+  .about-btns{flex-direction:column;width:100%}
+  .about-btns .btn-primary-light,
+  .about-btns .btn-ghost-light{width:100%;justify-content:center}
+
+  /* classes */
+  .classes{padding:72px 20px}
+  .classes-hd{flex-direction:column;align-items:flex-start;gap:14px;margin-bottom:40px}
+  .class-row{grid-template-columns:40px 1fr;gap:16px}
+  .class-dur,.class-lvl,.class-book{display:none}
+  .classes-footer{margin-top:36px}
+  .classes-footer .btn-row{flex-direction:column;width:100%}
+  .classes-footer .btn-primary,
+  .classes-footer .btn-ghost{width:100%;justify-content:center}
+
+  /* testimonials */
+  .testimonials{padding:72px 20px}
+  .testi-grid{grid-template-columns:1fr;gap:16px}
+  .testi{padding:26px}
+
+  /* booking cta */
+  .booking{padding:96px 20px}
+  .booking::before,.booking::after{display:none}
+  .booking .btn-row{flex-direction:column;align-items:center}
+  .booking .btn-primary-light,
+  .booking .btn-ghost-light{width:100%;max-width:320px;justify-content:center}
+
+  /* footer */
+  footer{padding:56px 20px 0;grid-template-columns:1fr;gap:36px}
+  .footer-btm{padding:20px;flex-direction:column;gap:8px;text-align:center}
+}
+
+/* Mid-small phones */
+@media(max-width:480px){
+  .stat-num{font-size:2rem}
+  .testi blockquote{font-size:.95rem}
+  .card-title{font-size:1.4rem}
+}
+
+/* Small phones */
+@media(max-width:420px){
+  .hero h1{font-size:clamp(3.4rem,18vw,5rem)}
+  .hero-sub{letter-spacing:.18em}
+  .eyebrow{letter-spacing:.28em}
+  .stat-lbl{font-size:.58rem;letter-spacing:.14em}
+}
+
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Nirvana</a>
+  <ul class="nav-center">
+    <li><a href="#offerings">Offerings</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="booking.html" class="nav-cta">Book Now</a>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <ul>
+    <li><a href="#offerings" class="m-link">Offerings</a></li>
+    <li><a href="#about"     class="m-link">About</a></li>
+    <li><a href="#classes"   class="m-link">Classes</a></li>
+    <li><a href="#contact"   class="m-link">Contact</a></li>
+  </ul>
+  <a href="booking.html" class="nav-cta m-link">Reserve Your Spot</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="eyebrow">Pilates &amp; Wellness Studio</span>
+    <h1>Nir<em>vana</em></h1>
+    <span class="hero-sub">Where movement meets stillness</span>
+    <div class="hero-actions">
+      <a href="booking.html"   class="btn-primary-light">Book Your First Session</a>
+      <a href="#offerings" class="btn-ghost-light">Explore Offerings</a>
+    </div>
+    <a href="#offerings" class="scroll-hint">Discover</a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-text">Pilates<span class="marquee-dot">·</span>Float Therapy<span class="marquee-dot">·</span>Restoration<span class="marquee-dot">·</span>Bodywork<span class="marquee-dot">·</span>Meditation<span class="marquee-dot">·</span>Nirvana Studio<span class="marquee-dot">·</span>Breathwork<span class="marquee-dot">·</span>Reformer<span class="marquee-dot">·</span>Deep Stretch<span class="marquee-dot">·</span>Intentional Movement<span class="marquee-dot">·</span>&nbsp;&nbsp;</span>
+    <span class="marquee-text" aria-hidden="true">Pilates<span class="marquee-dot">·</span>Float Therapy<span class="marquee-dot">·</span>Restoration<span class="marquee-dot">·</span>Bodywork<span class="marquee-dot">·</span>Meditation<span class="marquee-dot">·</span>Nirvana Studio<span class="marquee-dot">·</span>Breathwork<span class="marquee-dot">·</span>Reformer<span class="marquee-dot">·</span>Deep Stretch<span class="marquee-dot">·</span>Intentional Movement<span class="marquee-dot">·</span>&nbsp;&nbsp;</span>
+  </div>
+</div>
+
+<!-- OFFERINGS -->
+<section class="offerings" id="offerings">
+  <div class="offerings-hd fade-up">
+    <div>
+      <span class="section-label">What We Offer</span>
+      <h2>Curated <em>offerings</em></h2>
+    </div>
+    <a href="booking.html" class="text-link">View all services →</a>
+  </div>
+
+  <div class="offerings-grid stagger">
+    <div class="card">
+      <div class="card-img">
+        <img src="https://images.unsplash.com/photo-1747239202356-764770773c9a?w=900&q=80" alt="Restorative Touch" loading="lazy">
+        <span class="card-badge">Featured</span>
+        <div class="card-meta"><span>60 — 90 min</span><span>From R680</span></div>
+        <div class="card-hover-btn"><a href="booking.html">Book This Session</a></div>
+      </div>
+      <div class="card-body">
+        <span class="card-cat">Bodywork</span>
+        <h3 class="card-title">Restorative Touch</h3>
+        <p class="card-desc">Deep tissue and meridian release, guided by intuition and 15 years of anatomical expertise.</p>
+        <a href="booking.html" class="text-link">Explore →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://images.unsplash.com/photo-1754257319789-f6fa7c284ba2?w=900&q=80" alt="Float & Surrender" loading="lazy">
+        <span class="card-badge">Featured</span>
+        <div class="card-meta"><span>60 — 90 min</span><span>From R750</span></div>
+        <div class="card-hover-btn"><a href="booking.html">Book This Session</a></div>
+      </div>
+      <div class="card-body">
+        <span class="card-cat">Float Therapy</span>
+        <h3 class="card-title">Float &amp; <em>Surrender</em></h3>
+        <p class="card-desc">Sensory-free floating in temperature water. A profound reset for nervous system response.</p>
+        <a href="booking.html" class="text-link">Explore →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://images.unsplash.com/photo-1747240549807-fc3962949818?w=900&q=80" alt="Reformer Pilates" loading="lazy">
+        <span class="card-badge">Signature</span>
+        <div class="card-meta"><span>55 min</span><span>From R320</span></div>
+        <div class="card-hover-btn"><a href="booking.html">Book This Session</a></div>
+      </div>
+      <div class="card-body">
+        <span class="card-cat">Pilates</span>
+        <h3 class="card-title">Reformer <em>Pilates</em></h3>
+        <p class="card-desc">Precision movement on the reformer, building strength, length and deep core awareness.</p>
+        <a href="booking.html" class="text-link">Explore →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <img src="https://plus.unsplash.com/premium_photo-1666264200744-51f90d07c09e?w=900&q=80" alt="Guided Meditation" loading="lazy">
+        <span class="card-badge card-badge-sage">New</span>
+        <div class="card-meta"><span>40 min</span><span>From R220</span></div>
+        <div class="card-hover-btn"><a href="booking.html">Book This Session</a></div>
+      </div>
+      <div class="card-body">
+        <span class="card-cat">Mindfulness</span>
+        <h3 class="card-title">Guided <em>Meditation</em></h3>
+        <p class="card-desc">Structured stillness for an overactive mind. Breathwork and somatic awareness practices.</p>
+        <a href="booking.html" class="text-link">Explore →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="offerings-footer fade-up">
+    <div class="btn-row btn-row-center">
+      <a href="booking.html" class="btn-primary">Book a Treatment</a>
+      <a href="#classes" class="btn-ghost">View Classes</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-img-wrap fade-up">
+    <div class="about-img">
+      <img src="https://images.unsplash.com/photo-1754257319723-6a775bedb0fc?w=900&q=80" alt="Nirvana Studio" loading="lazy">
+    </div>
+    <div class="about-accent"></div>
+  </div>
+  <div class="fade-up">
+    <span class="section-label section-label-light">Our Story</span>
+    <h2>A space for <em>intentional</em> movement</h2>
+    <p>Nirvana was born from a simple belief: that when the body moves well, everything else follows. We created a studio where high-performance meets deep stillness.</p>
+    <p>Every session is guided by practitioners who understand that the body and mind are inseparable — and that real transformation happens when both are attended to with equal care.</p>
+    <div class="about-btns btn-row" style="margin-top:36px;margin-bottom:48px;">
+      <a href="booking.html"   class="btn-primary-light">Meet Our Guides</a>
+      <a href="#offerings" class="btn-ghost-light">Our Philosophy</a>
+    </div>
+    <div class="stats">
+      <div><div class="stat-num">12+</div><div class="stat-lbl">Years of practice</div></div>
+      <div><div class="stat-num">800+</div><div class="stat-lbl">Sessions monthly</div></div>
+      <div><div class="stat-num">4</div><div class="stat-lbl">Expert guides</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLASSES -->
+<section class="classes" id="classes">
+  <div class="classes-hd fade-up">
+    <div>
+      <span class="section-label">Schedule</span>
+      <h2>Weekly <em>classes</em></h2>
+    </div>
+    <a href="booking.html" class="text-link">View full schedule →</a>
+  </div>
+
+  <div class="class-list stagger">
+    <div class="class-row">
+      <span class="class-num">01</span>
+      <div class="class-info"><h3>Morning Flow Pilates</h3><p>Monday, Wednesday, Friday · 06:00</p></div>
+      <span class="class-dur">55 min</span>
+      <span class="class-lvl">All levels</span>
+      <a href="booking.html" class="class-book">Book →</a>
+    </div>
+    <div class="class-row">
+      <span class="class-num">02</span>
+      <div class="class-info"><h3>Reformer Foundations</h3><p>Tuesday, Thursday · 07:30</p></div>
+      <span class="class-dur">60 min</span>
+      <span class="class-lvl">Beginner</span>
+      <a href="booking.html" class="class-book">Book →</a>
+    </div>
+    <div class="class-row">
+      <span class="class-num">03</span>
+      <div class="class-info"><h3>Deep Stretch &amp; Restore</h3><p>Wednesday · 18:00</p></div>
+      <span class="class-dur">75 min</span>
+      <span class="class-lvl">All levels</span>
+      <a href="booking.html" class="class-book">Book →</a>
+    </div>
+    <div class="class-row">
+      <span class="class-num">04</span>
+      <div class="class-info"><h3>Advanced Reformer</h3><p>Saturday · 09:00</p></div>
+      <span class="class-dur">60 min</span>
+      <span class="class-lvl">Advanced</span>
+      <a href="booking.html" class="class-book">Book →</a>
+    </div>
+    <div class="class-row">
+      <span class="class-num">05</span>
+      <div class="class-info"><h3>Breathwork &amp; Meditation</h3><p>Sunday · 08:00</p></div>
+      <span class="class-dur">45 min</span>
+      <span class="class-lvl">All levels</span>
+      <a href="booking.html" class="class-book">Book →</a>
+    </div>
+  </div>
+
+  <div class="classes-footer fade-up">
+    <div class="btn-row">
+      <a href="booking.html" class="btn-primary">Book a Class</a>
+      <a href="booking.html" class="btn-ghost">View Full Timetable</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testi-hd fade-up">
+    <span class="section-label">Words from our community</span>
+    <h2>Shared <em>experiences</em></h2>
+  </div>
+  <div class="testi-grid stagger">
+    <div class="testi">
+      <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <blockquote>"Nirvana changed the way I inhabit my body. The instructors see you — really see you — and guide you accordingly."</blockquote>
+      <cite>— Amara K., Member since 2023</cite>
+    </div>
+    <div class="testi">
+      <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <blockquote>"I came for the reformer classes and stayed for the community. There is nothing else like it in the city."</blockquote>
+      <cite>— James T., Member since 2022</cite>
+    </div>
+    <div class="testi">
+      <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <blockquote>"The Float &amp; Surrender session was the deepest rest I have had in years. I come monthly now without fail."</blockquote>
+      <cite>— Lerato M., Member since 2024</cite>
+    </div>
+  </div>
+  <div class="testi-footer fade-up">
+    <a href="booking.html" class="text-link">Join our community →</a>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="booking" id="booking">
+  <div class="booking-inner fade-up">
+    <span class="section-label section-label-light">Begin your journey</span>
+    <h2>Book a <em>session</em></h2>
+    <p>Reserve your space in our intimate studio. First time? Reach out — we will match you to the right offering.</p>
+    <div class="btn-row btn-row-center">
+      <a href="mailto:hello@nirvanapilates.co.za" class="btn-primary-light">Reserve Your Spot</a>
+      <a href="tel:+27000000000"                  class="btn-ghost-light">Call Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-brand">
+    <a href="#" class="nav-logo">Nirvana</a>
+    <p>A pilates &amp; wellness studio dedicated to intentional movement and deep restoration.</p>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Facebook</a>
+    </div>
+  </div>
+  <div class="footer-col">
+    <h4>Navigate</h4>
+    <ul>
+      <li><a href="#offerings">Offerings</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#classes">Classes</a></li>
+      <li><a href="booking.html">Book Now</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <ul>
+      <li><a href="mailto:hello@nirvanapilates.co.za">hello@nirvanapilates.co.za</a></li>
+      <li><a href="tel:+27000000000">+27 (0) 00 000 0000</a></li>
+      <li><a href="#">Johannesburg, South Africa</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-btm">
+  <p>© 2026 Nirvana Pilates. All rights reserved.</p>
+  <p>Crafted with intention</p>
+</div>
+
+<script>
+  // Hero slow-zoom on load
+  document.getElementById('hero').classList.add('loaded');
+
+  // Hamburger toggle
+  const burger = document.getElementById('hamburger');
+  const menu   = document.getElementById('mobileMenu');
+
+  burger.addEventListener('click', () => {
+    const open = burger.classList.toggle('open');
+    menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+    menu.setAttribute('aria-hidden', !open);
+  });
+
+  document.querySelectorAll('.m-link').forEach(a =>
+    a.addEventListener('click', () => {
+      burger.classList.remove('open');
+      menu.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+      menu.setAttribute('aria-hidden','true');
+    })
+  );
+
+  // Fade-in on scroll (stagger + simple)
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      if (el.classList.contains('stagger')) {
+        [...el.children].forEach((child, i) =>
+          setTimeout(() => child.classList.add('visible'), i * 110)
+        );
+      } else {
+        el.classList.add('visible');
+      }
+      io.unobserve(el);
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up, .stagger').forEach(el => io.observe(el));
+
+  // Pause marquee on reduced-motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelector('.marquee-track').style.animation = 'none';
+  }
+</script>
+</body>
+</html>
